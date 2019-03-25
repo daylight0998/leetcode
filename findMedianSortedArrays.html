@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+        /**
+         * @param {number[]} nums1
+         * @param {number[]} nums2
+         * @return {number}
+         */
+        var findMedianSortedArrays = function(nums1, nums2) {
+            var findMedianSortedArrays = function(nums1, nums2) {
+                if(!nums1.length || !nums2.length) return false;
+                let newArray = [...nums1, ...nums2];
+                newArray.sort((a,b)=>{ return a-b;});
+                if(newArray.length%2 !== 0){
+                    return newArray[Math.floor(newArray.length/2)];}
+                else {
+                    return (newArray[(newArray.length/2)-1]+newArray[(newArray.length/2)])/2;}
+            };
+        };
+        console.log(findMedianSortedArrays([1,2,3], [2,4,5]))
+    </script>
+</head>
+<body>
+
+</body>
+</html>

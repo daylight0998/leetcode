@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+        /**
+         * Definition for singly-linked list.
+         * function ListNode(val) {
+         *     this.val = val;
+         *     this.next = null;
+         * }
+         */
+        /**
+         * @param {ListNode} l1
+         * @param {ListNode} l2
+         * @return {ListNode}
+         */
+
+        var ListNode = function(val) {
+            this.val = val;
+            this.next = null;
+        }
+
+        //链表类
+        function LList () {
+            this.head = new ListNode( 'head' );     //头节点
+            this.find = find;                   //查找节点
+            this.insert = insert;               //插入节点
+            // this.remove = remove;               //删除节点
+            // this.findPrev = findPrev;           //查找前一个节点
+            this.display = display;             //显示链表
+        }
+        //查找给定节点
+
+        function find ( item ) {
+            var currNode = this.head;
+            while ( currNode.val != item ){
+                currNode = currNode.next;
+            }
+            return currNode;
+        }
+
+        function insert ( newElement , item ) {
+            var newNode = new ListNode( newElement );
+            var currNode = this.find( item );
+            newNode.next = currNode.next;
+            currNode.next = newNode;
+        }
+        function display () {
+            var currNode = this.head;
+            while ( !(currNode.next == null) ){
+                console.log( currNode.next.val );
+                currNode = currNode.next;
+            }
+        }
+        var addTwoNumbers = function(l1, l2) {
+            const head = new ListNode(-1);
+            var cur = head;
+            var carry = 0;
+            while (l1 || l2) {
+                var v1 = l1 ? l1.val : 0;
+                var v2 = l2 ? l2.val : 0;
+                var sum = v1 + v2 + carry;
+                carry = sum / 10;
+                var tmp1 = sum % 10;
+                var tmp = tmp1 >= 1 ? parseInt(tmp1) : 0;
+                cur.next = new ListNode(tmp);
+                cur = cur.next;
+                console.log(cur.val);
+                if(l1) l1 = l1.next;
+                if(l2) l2 = l2.next;
+            }
+            if(carry >= 1) cur.next = new ListNode(1);
+            return head.next;
+        };
+
+        var l1 = new LList();
+        l1.insert(2, "head");
+        l1.insert(4, 2);
+        l1.insert(3, 4);
+        // l1.display();
+        var l2 = new LList();
+        l2.insert(5, "head");
+        l2.insert(6, 5);
+        l2.insert(4, 6);
+        // l2.display();
+        addTwoNumbers(l1.find(2), l2.find(5));
+        addTwoNumbers(l1.find(4), l2.find(6));
+        addTwoNumbers(l1.find(3), l2.find(4));
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>

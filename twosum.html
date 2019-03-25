@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+        //查找制定元素在数组中的索引值
+        Array.prototype.indexVf=function(arr){
+            const ar = [];
+            for(let i=0;i<this.length;i++){
+                if(this[i] == arr){
+                    ar.push(i)
+                    // console.log(i)
+                    // return i;
+                }
+
+            }
+            return ar;
+        };
+        const aa = [1,2,1,4,5];
+        // aa.indexVf(1)
+        console.log(aa.indexVf(1));//得到1在aa中的下标0
+
+        /**
+         * @param {number[]} arr1
+         * @param {number[]} arr2
+         * @return {boolean}
+         */
+
+        includes = function (arr1, arr2) {
+            return arr2.every(val => arr1.includes(val))
+        };
+
+        let a = [1, 2, 3, 4, 5];
+        let b = [2, 3];
+        console.log(includes(b, a));
+
+        /**
+         * one array include another array
+         * @param {number[][]} array
+         * @param {number[]} element
+         * @return {boolean}
+         */
+        // function includes1 (arr1, arr2) {
+        //     return arr2.every(val => arr1.includes(val))
+        // }
+
+        /**
+         * @param {number[][]} array
+         * @param {number[]} element
+         * @return {boolean}
+         */
+        const arrayHasElement = function(array, element) {  // 判断二维数组array中是否存在一维数组element
+            for (let el of array) {
+                if (el.length === element.length) {
+                    for (let index in el) {
+                        if (el[index] !== element[index]) {
+                            break;
+                        }
+                        if (index == (el.length - 1)) {    // 到最后一个元素都没有出现不相等，就说明这两个数组相等。
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        };
+
+        /**
+         * @param {number[]} nums
+         * @param {number} target
+         * @return {number[]}
+         */
+        const twoSum = function(nums, target) {
+            const arr = [];
+            for (let i = 0; i < nums.length; i++) {
+                const complement = target - nums[i];
+                let pair = nums.indexVf(complement);
+                // const pair = nums.indexOf(complement);
+                // if (pair !== -1 && pair != i) {
+                //     arr.push([i, pair]);
+                // }
+                if ( pair.length != 0 ) {
+                    for (let j = 0; j < pair.length; j++) {
+                        if( pair[j] != i && !arrayHasElement(arr, [pair[j], i])) {
+                            arr.push([i, pair[j]])
+                        }
+                    }
+                }
+            }
+            return arr;
+        };
+        console.log("==========");
+        console.log(twoSum([2, 2, 4, 2, 2], 4));
+
+        console.log("====map======");
+
+        const twoSum1 = function (nums, target) {
+            const map = {};
+            const len = nums.length;
+            map[target - nums[0]] = 0;
+            for (let i = 1; i < len; i++) {
+                const n = nums[i];
+                console.log(map);
+                if (n in map) return [map[n], i];
+                map[target-n] = i;
+            }
+        };
+        console.log(twoSum1([2,2,4,2,2], 4));
+        console.log("==== map end ======");
+
+        console.log("==== Map ======");
+        const twoSum2 = function (nums, target){
+            let map = new Map();
+            map.set(target - nums[0], 0);
+            console.log(map);
+            for (let i = 1; i < nums.length; i++){
+                const n = nums[i];
+                if (map.has(n)) return [map.get(n), i];
+                map.set(target - n, i);
+                for (let key of map.keys()) {
+                    console.log(key)
+                }
+                for (let [key, value] of map.entries()) {
+                    console.log(key + " : " + value)
+                }
+                map.forEach(function (value, key, map) {
+                    console.log(key + " : " + value + " : " + map.size)
+                }, map)
+            }
+        };
+        console.log(twoSum2([3,2,4,2,2], 4));
+        console.log("==== Map end ======");
+
+        // array to map
+        let kvArray = [["key1", "value1"], ["key2", "value2"]];
+        const myMap = new Map(kvArray);
+        let key1 = myMap.get("key1");
+
+        console.log(key1);
+        console.log(myMap);
+
+        // clone
+        let clone = new Map(myMap);
+        console.log("clone: " + clone);
+        console.log("clone key2: " + clone.get("key2"));
+        console.log(myMap === clone);  // false. Useful for shallow comparison
+
+        // map to array
+        let arrFromMap = Array.from(myMap);
+        console.log(arrFromMap);
+        console.log("==== arr from map =====");
+
+        // two map merge
+        let first = new Map([
+            [1, 'one'],
+            [2, 'two'],
+            [3, 'three'],
+        ]);
+
+        let second = new Map([
+            [1, 'uno'],
+            [2, 'dos']
+        ]);
+        console.log(...first);
+
+        // 合并两个Map对象时，如果有重复的键值，则后面的会覆盖前面的。
+        // 展开运算符本质上是将Map对象转换成数组。Map对象  [1, 'eins'] 也能与数组合并：
+        let mergedMap = new Map([...first, ...second]);
+        console.log(mergedMap.get(1));
+        console.log(mergedMap.get(2));
+        console.log(mergedMap.get(3));
+
+        /**
+         * @param {number[]} nums1
+         * @param {number[]} nums2
+         * @return {number}
+         */
+        const findMedianSortedArrays = function(nums1, nums2) {
+            if (!nums1.length || !nums2.length) return 0;
+            let newArray = [...nums1, ...nums2];
+            newArray.sort((a, b) => {
+                return a - b;
+            });
+            if (newArray.length % 2 !== 0) {
+                return newArray[Math.floor(newArray.length / 2)];
+            } else {
+                return (newArray[(newArray.length / 2) - 1] + newArray[(newArray.length / 2)]) / 2;
+            }
+        };
+        console.log(findMedianSortedArrays([1,2,3], [2,4,5]))
+
+        /**
+         * ... option
+         */
+
+        const add  = function (x, y) {
+            return x + y;
+        };
+
+        const push  = function (array, ...items) {
+            array.push(...items);
+        };
+        let numbuers = [2, 40];
+        let array1 = [];
+        console.log(add(...numbuers));
+        console.log(push(array1, ...numbuers));
+
+        // ...运算符将数组变为一个函数的 参数序列
+        function f(v, w, x, y, z) {
+            console.log(v, w, x, y, z)
+        }
+        let args = [0, 1];
+        f(-1, ...args, 2, ...[3]);
+
+        // 2 替代数组的 apply 方法
+        // 由于扩展运算符可以展开数组，所以不再需要apply方法，将数组转为函数的参数了。
+
+        // ES5 的写法
+        // function f1(x, y, z) {
+        //     // ...
+        // }
+        let args1 = [0, 4, 2];
+        // f1.apply(null, args1);
+        console.log(Math.max.apply(null, args1));
+
+        // ES6 的写法
+        // function f2(x, y, z) {
+        //     // ...
+        // }
+        let args2 = [0, 5, 2];
+        // f2(...args2);
+        console.log(Math.max(...args2));
+
+        // arr2 push to arr1
+        // ES5 的写法
+
+        let arr3 = [0, 1, 2];
+        let arr4 = [3, 4, 5];
+        Array.prototype.push.apply(arr3, arr4);
+        console.log(arr3);
+
+        // ES6 的写法
+        // var arr1 = [0, 1, 2];
+        // var arr2 = [3, 4, 5];
+        arr3.push(...arr4);
+        console.log(arr3);
+        console.log("==== ...arr push end ====");
+        // ES5
+        console.log(new (Date.bind.apply(Date, [null, 2015, 1, 1])));
+        // ES6
+        console.log(new Date(...[2015, 1, 1]));
+        console.log(new Date(2015, 1, 1));
+        console.log(Date())
+
+        let arr5 = ['a', 'b'];
+        let arr6 = ['c'];
+        let arr7 = ['d', 'e'];
+        // ES5 的合并数组
+        console.log(arr5.concat(arr6, arr7));
+        // [ 'a', 'b', 'c', 'd', 'e' ]
+        // ES6 的合并数组
+        console.log([...arr5, ...arr6, ...arr7]);
+        // [ 'a', 'b', 'c', 'd', 'e' ]
+
+        // 赋值
+        // 如果将扩展运算符用于数组赋值，只能放在参数的最后一位，否则会报错。
+        // const[...butLast,last]=[1,2,3,4,5];
+        //报错 Rest element must be last element
+        // const[first,...middle,last]=[1,2,3,4,5];
+        //报错
+        // const [...butLast, last] = [1, 2, 3, 4, 5];
+        // 报错
+        // const [first, ...middle, last] = [1, 2, 3, 4, 5];
+        // 报错
+
+        // const [first1, middle2, ...last3] = [1, 2, 3, 4, 5];
+        // 正确
+
+        // 函数返回值
+        // 下面代码从数据库取出一行数据，通过扩展运算符，直接将其传入构造函数Date。
+
+        // let dateFields = readDateFields(database);
+        // let d = new Date(...dateFields);
+        // console.log(d)
+
+        // 字符串 有一个重要的好处，那就是能够正确识别 32 位的 Unicode 字符。
+        console.log(...'hello');
+        console.log([...'hello']);
+        console.log('hello'.split('').reverse().join(''));
+        console.log([...'hello'].reverse().join(''));
+        console.log([...'hello'].length);
+
+        // ( 5 )实现了 Iterator 接口的对象
+        // 任何 Iterator 接口的对象，都可以用扩展运算符转为真正的数组。
+        //querySelectorAll方法返回的是一个nodeList对象。它不是数组，而是一个类似数组的对象。
+        // 这时，扩展运算符可以将其转为真正的数组，原因就在于NodeList对象实现了 Iterator 接口。
+        let nodeList = document.querySelectorAll('p');
+        let array3 = [...nodeList];
+        console.log(arr3);
+
+        // arrayLike是一个类似数组的对象，但是没有部署 Iterator 接口，扩展运算符就会报错。
+        // 这时，可以改为使用Array.from方法将arrayLike转为真正的数组
+        let arrayLike = {
+            '0': 'a',
+            '1': 'b',
+            '2': 'c',
+            length: 3
+        };
+        // TypeError: Cannot spread non-iterable object.
+        let arrFromMap1 = Array.from(arrayLike);
+        console.log(arrFromMap1);
+        let arr8 = [...arrFromMap1];
+        console.log(arr8)
+
+        // ( 6 ) Map 和 Set 结构， Generator 函数  都输入 iterable 类型
+        // generator 函数 generator generator（生成器）是ES6标准引入的新的数据类型， 一个generator看上去像一个函数，但可以返回多次。
+        // 遍历Array可以采用下标循环，遍历Map和Set就无法使用下标。为了统一集合类型，ES6标准引入了新的iterable类型，Array、Map和Set都属于iterable类型。
+        // 具有iterable类型的集合可以通过新的for ... of循环来遍历。
+        // 'use strict';
+        // var a = [1, 2, 3];
+        // for (var x of a) {
+        // }
+        // 扩展运算符内部调用的是数据结构的 Iterator 接口，因此只要具有 Iterator 接口的对象，都可以使用扩展运算符，比如 Map 结构。
+
+        let map2 = new Map([
+            [1, 'one'],
+            [2, 'two'],
+            [3, 'three'],
+        ]);
+
+        let arr9 = [...map2.values()]; // [1, 2, 3]
+        // ["one", "two", "three"]
+        console.log(arr9)
+        //    Generator 函数运行后，返回一个遍历器对象，因此也可以使用扩展运算符。
+        let go = function *() {  // function* go(){}
+            yield 1;
+            yield 2;
+            yield 3;
+        };
+        console.log([...go()]);
+        // 上面代码中，变量go是一个 Generator 函数，执行后返回的是一个遍历器对象，
+        // 对这个遍历器对象执行扩展运算符，就会将内部遍历得到的值，转为一个数组。
+
+
+        // for ... of循环和for ... in循环有何区别？
+        // for ... in循环实际上是循环属性名称
+        // for (let x of a){} 完全修复了这些问题，它只循环集合本身的元素
+
+        function* next_id(max) {
+            var i = 1;
+            while (i < max) {
+                yield i;
+                i ++;
+            }
+            return;
+        }
+        console.log(next_id(100).next());
+        console.log([...next_id(100)]);
+
+        function* fib(max) {
+            var
+                t,
+                a = 0,
+                b = 1,
+                n = 0;
+            while (n < max) {
+                [a, b] = [b, a + b];
+                n ++;
+                yield a;
+            }
+            return;
+        }
+
+        console.log([...fib(5)]);
+        // console.log(fib(5).next());
+
+        var f = fib(5);
+        console.log(f.next()); // {value: 0, done: false}
+        console.log(f.next()); // {value: 0, done: false}
+        f.next(); // {value: 1, done: false}
+        f.next(); // {value: 1, done: false}
+        f.next(); // {value: 2, done: false}
+        f.next(); // {value: 3, done: false}
+        console.log(f.next()); // {value: undefined, done: true}
+
+        // 测试:
+        var
+            x,
+            pass = true,
+            g = next_id();
+        for (x = 1; x < 100; x ++) {
+            console.log(g.next().value !== x);
+
+            if (g.next().value !== x) {
+                pass = false;
+                console.log('测试失败!');
+                break;
+            }
+        }
+        if (pass) {
+            console.log('测试通过!');
+        }
+
+        //   有了generator的美好时代，用AJAX时可以这么写：看上去是同步的代码，实际执行是异步的。
+
+        // function* f2() {
+        //     try {
+        //         r1 = yield ajax('http://url-1', data1);
+        //         r2 = yield ajax('http://url-2', data2);
+        //         r3 = yield ajax('http://url-3', data3);
+        //         success(r3);
+        //     }
+        //     catch (err) {
+        //         handle(err);
+        //     }
+        // }
+
+
+        // 箭头函数 Arrow Function
+        // 两个参数:
+        // (x, y) => x * x + y * y
+
+        // 无参数:
+        // () => 3.14
+
+        // 可变参数:
+        // (x, y, ...rest) => {
+        //     var i, sum = x + y;
+        //     for (i=0; i<rest.length; i++) {
+        //         sum += rest[i];
+        //     }
+        //     return sum;
+        // }
+
+    //    如果要返回一个对象，
+        // SyntaxError:
+        // x => { foo: x }
+
+        // ok:
+        var d = 0;
+        let f4 = () => ({ foo: d })
+        console.log(f4());
+
+        // this
+        // 现在，箭头函数完全修复了this的指向，this总是指向词法作用域，也就是外层调用者obj：
+        const obj = {
+            birth: 1990,
+            getAge: function () {
+                var b = this.birth; // 1990
+                var a = 123;
+                var fn = () => new Date().getFullYear() - this.birth; // this指向obj对象
+                return fn();
+            }
+        };
+        console.log(obj.getAge()); // 25
+
+        // 如果使用箭头函数，以前的那种hack写法：
+        // var that = this;
+        // 就不再需要了。
+
+        var arr10 = [10, 20, 1, 2];
+        arr10.sort((x, y) => {
+            // return x - y;
+            return x > y ? 1 : -1;
+        })
+        console.log(arr10);
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>
