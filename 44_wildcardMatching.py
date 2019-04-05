@@ -58,18 +58,23 @@ class S:
     def helper(self, s, p, i, j):
         ls = len(s)
         lp = len(p)
-        if i >= ls-1 and j >= lp-1:
+        if ls == 0:
+            if lp == 0 or (lp == 1 and p[0] == '*'):
+                return 2
+            else:
+                return 0
+        if i == ls and j == lp:
             return 2    # 返回2表示成功匹配
         if i == ls and p[j] != '*':
             return 0    # 若s串匹配完成了，但p串但当前字符不是星号，返回状态0, 失败
         if j == lp:
             return 1    # 匹配结束
-        if s[i] == p[j] or p[j] == '?':
+        if j < lp and i < ls and (s[i] == p[j] or p[j] == '?'):
             return self.helper(s, p, i + 1, j + 1)
         if p[j] == '*':
             if j + 1 < lp and p[j + 1] == '*':
                 return self.helper(s, p, i, j + 1)
-            for k in range(0, ls - i):
+            for k in range(0, ls - i + 1):
                 res = self.helper(s, p, i + k, j + 1)
                 if res == 0 or res == 2:
                     return res
@@ -77,6 +82,10 @@ class S:
 
 
 m = S()
-print(m.match("adcebd", "?d**c*b*?"))
+print(m.match("", "*a*"))
+# print(m.match("mississippi", "m??*ss*?i*pi"))
+# print(m.match("", "*"))
+# print(m.match("aa", "a"))
+# print(m.match("adcebd", "?d**c*b*?"))
 # print(m.match("adceb", "*a*b"))
 # print(m.match("acdcb", "a*"))
