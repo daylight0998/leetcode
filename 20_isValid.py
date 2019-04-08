@@ -8,6 +8,8 @@
 # Input: "{}[]()"
 # Output: true
 
+# https://blog.csdn.net/win_turn/article/details/52998299
+
 # st = '0123456789'
 # print(st[0:3]) #截取第一位到第三位的字符
 # print str[:] #截取字符串的全部字符
@@ -19,6 +21,45 @@
 # print str[-3:-1] #截取倒数第三位与倒数第一位之前的字符
 # print str[-3:] #截取倒数第三位到结尾
 # print str[:-5:-3] #逆序截取,
+
+# 使用 stack 解决，定义stack = 【】
+# 将判断的字符放入字典， dict = {")": "(", "]": "[", "}": "{"}
+# 遍历字符串，判断 char 是否在 dict 的 values 里
+# 如果在，则入栈 stack.append(char)
+# 如果在 dict 的 keys 里， 首先判断stack == 【】
+# 如果为空，返回False,
+# 或判断dict.pop 是否等于 所遍历的 dict[char] 若不等， 返回False
+# 否则 如果返回 False
+# 最后判断栈是否空，如果空，返回False
+
+
+class S:
+    def isValid(self, s:str) -> bool:
+        stack = []
+        dict = {")": "(", "]": "[", "}": "{"}
+        if len(s) == 0:
+            return True
+        for char in s:
+            if char in dict.values():
+                stack.append(char)
+            elif char in dict.keys():
+                if stack == [] or dict[char] != stack.pop():
+                    return False
+            else:
+                return False
+        return stack == []
+
+
+s = S()
+print(s.isValid("()"))
+# print(s.isValid(""))
+
+
+
+
+
+
+
 
 
 class Solution:
@@ -79,9 +120,9 @@ class Solution:
         return True
 
 
-s = Solution()
+# s = Solution()
 # print(s.isValid("{}[]()"))
-print(s.isValid("{[]}"))
+# print(s.isValid("{[]}"))
 
 
 
