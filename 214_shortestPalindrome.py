@@ -17,9 +17,32 @@ class Solution:
         return s[cont[-1]:][::-1] + s
 
 
-d = Solution()
-print(d.shortestPalindrome("abcd"))
+# d = Solution()
+# print(d.shortestPalindrome("abcd"))
+#
+# c = [0, 0, 1, 1, 0, 1, 1, 2, 3]
+# s = "abcd"
+# print(s[3:][::-1])
 
-c = [0, 0, 1, 1, 0, 1, 1, 2, 3]
-s = "abcd"
-print(s[3:][::-1])
+
+class S:
+    def shortestPalindrome1(self, g):
+        s = g + "|" + g[::-1]
+        lps = [-1] + [0] * len(s)
+        print(s)
+        print(lps)
+        print("=========")
+        l, r = -1, 0
+        while r < len(s):
+            while l >= 0 and s[l] != s[r]:
+                l = lps[l]
+            l, r = l + 1, r + 1
+            lps[r] = l
+        print(lps)
+        print(lps[-1])
+        print(g[lps[-1]:][::-1])
+        return g[lps[-1]:][::-1] + g
+
+
+s = S()
+print(s.shortestPalindrome1("abcd"))
